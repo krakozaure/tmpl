@@ -1,0 +1,30 @@
+#### Files/directories
+
+{{ with $x := expandenv "$HOME/.local/scripts" -}}
+scripts:       {{ $x }}
+len(scripts):  {{ $x | len }}
+{{ end }}
+
+-------------------------------------------------------
+
+{{ range $p := .test_paths -}}
+path:       {{ $p }}
+absPath:    {{ absPath $p }}
+isDir:      {{ isDir $p }}
+isFile:     {{ isFile $p }}
+fileExists: {{ fileExists $p }}
+fileMode:   {{ fileMode $p }}
+fileSize:   {{ fileSize $p }}
+fileMTime:  {{ fileMTime $p }}
+---
+{{ end }}
+
+-------------------------------------------------------
+
+{{ with $x := "./inputs/file with spaces.txt" -}}
+Content of "{{ $x }}"
+
+```raw
+{{ fileRead $x -}}
+```
+{{- end }}

@@ -1,0 +1,42 @@
+### Environment variables
+
+HOME:   {{ .Env.HOME }}
+USER:   {{ .Env.USER }}
+EDITOR: {{ .Env.EDITOR }}
+
+### Nested data
+
+key1:    {{ .map.key1 }}
+key2:    {{ .map.key2 }}
+key3:    {{ .map.key3 }}
+missing: {{ .map.missing }}
+
+### Booleans from string
+
+0:     {{ "0"     | toBool }}, 1:    {{ "1"    | toBool }}
+f:     {{ "f"     | toBool }}, t:    {{ "t"    | toBool }}
+F:     {{ "F"     | toBool }}, T:    {{ "T"    | toBool }}
+false: {{ "false" | toBool }}, true: {{ "true" | toBool }}
+False: {{ "False" | toBool }}, True: {{ "True" | toBool }}
+FALSE: {{ "FALSE" | toBool }}, TRUE: {{ "TRUE" | toBool }}
+
+### Data formats
+
+`.key` to YAML
+{{ .key | toYaml }}
+
+`.key.sub_key[2]` to JSON
+{{ index .key.sub_key 2 | toJson }}
+
+### Unsorted
+
+{{ with $t := "The quick brown fox jumps over the lazy dog." -}}
+Print "{{ $t }}" in 5 columns wrapped lines.
+{{ wrapWith 5 "\n" "The quick brown fox jumps over the lazy dog." }}
+{{- end }}
+
+uuidv4: {{ uuidv4 }}
+
+### Included templates
+
+{{ include "_paths.txt.tmpl" -}}
