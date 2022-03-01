@@ -18,7 +18,7 @@ each missing value will be replaced with an empty string.
 
 - Print help/usage message.
 
-```sh
+```bash
 # $ tmpl
 # $ tmpl -h
 $ tmpl --help
@@ -37,14 +37,14 @@ OPTIONS:
 
 - `stdin` and environment variables.
 
-```sh
+```bash
 $ echo "Editor = {{ .Env.EDITOR }}, Shell = {{ .Env.SHELL }}" | tmpl -
 Editor = nvim, Shell = /bin/bash
 ```
 
 - `stdin` and CLI variables.
 
-```sh
+```bash
 $ echo "Hello, {{ .foo }} !" | tmpl -v foo=bar -
 Hello, bar !
 ```
@@ -53,7 +53,7 @@ Hello, bar !
 
 Output is not pasted here because of its length.
 
-```sh
+```bash
 $ tmpl -f ./stores/data.yaml ./inputs/sample.txt.tmpl
 ```
 
