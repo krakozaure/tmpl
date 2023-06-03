@@ -39,7 +39,7 @@ func templateExecute(input string) (string, error) {
 	}
 
 	if len(ctx) == 0 {
-		loadContext(input)
+		loadContext()
 	}
 
 	err = tmpl.Execute(&outputBytes, ctx)

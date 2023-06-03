@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/BurntSushi/toml"
@@ -14,9 +13,7 @@ import (
 
 var ctx = make(map[string]interface{})
 
-func loadContext(input string) {
-	ctx["__includeDir__"] = getIncludeDir(input)
-
+func loadContext() {
 	if UseEnv {
 		ctx["Env"] = getEnvVariables()
 	}
@@ -29,22 +26,6 @@ func loadContext(input string) {
 
 	for k, v := range getCliVariables() {
 		ctx[k] = v
-	}
-}
-
-func getIncludeDir(input string) string {
-	// If input is stdin,
-	// template paths are relative to the current working directory
-	// else relative to the input directory
-	if input == "-" {
-		cwd, err := os.Getwd()
-		if err != nil {
-			return "."
-		} else {
-			return cwd
-		}
-	} else {
-		return filepath.Dir(input)
 	}
 }
 

@@ -14,6 +14,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+var inputsDir = "."
+
 func getFuncMap() template.FuncMap {
 	f := sprig.GenericFuncMap()
 
@@ -36,12 +38,11 @@ func getFuncMap() template.FuncMap {
 }
 
 func includeTemplate(input string) string {
+	includeDir := inputsDir
 	if !filepath.IsAbs(input) {
-		srcFileDir, ok := ctx["__includeDir__"].(string)
-		if ok {
-			input = filepath.Join(srcFileDir, input)
-		}
+		includeDir = getIncludeDir(input)
 	}
+	input = filepath.Join(includeDir, input)
 
 	outputString, err := templateExecute(input)
 	if err != nil {
@@ -51,6 +52,21 @@ func includeTemplate(input string) string {
 		return ""
 	}
 	return outputString
+}
+
+func getIncludeDir(input string) string {
+	// If input is stdin,
+	// template paths are relative to the current working directory
+	// else relative to the input directory
+	if input == "-" {
+		cwd, err := filepath.Abs(".")
+		if err != nil {
+			cwd = "."
+		}
+		return cwd
+	} else {
+		return inputsDir
+	}
 }
 
 func toBool(value string) bool {

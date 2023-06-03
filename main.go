@@ -21,6 +21,7 @@ func main() {
 		if err == nil {
 			input = inputAbs
 		}
+		inputsDir = filepath.Dir(inputAbs)
 	}
 
 	err := templateRun(input)
