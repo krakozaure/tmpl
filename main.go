@@ -18,7 +18,7 @@ func main() {
 	input := flag.Arg(0)
 	if input != "-" {
 		inputAbs, err := filepath.Abs(input)
-		if err != nil {
+		if err == nil {
 			input = inputAbs
 		}
 	}
