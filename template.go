@@ -10,7 +10,7 @@ import (
 )
 
 func templateRun(input string) error {
-	outputString, err := templateExecute(input)
+	outputString, err := executeTemplateFile(input)
 	if err != nil {
 		return err
 	}
@@ -18,7 +18,7 @@ func templateRun(input string) error {
 	return nil
 }
 
-func templateExecute(input string) (string, error) {
+func executeTemplateFile(input string) (string, error) {
 	var (
 		err          error
 		outputBytes  bytes.Buffer

@@ -45,7 +45,7 @@ func include(input string) string {
 	}
 	input = filepath.Join(includeDir, input)
 
-	outputString, err := templateExecute(input)
+	outputString, err := executeTemplateFile(input)
 	if err != nil {
 		if Strict {
 			panic(fmt.Errorf("unable to render included template\n%v\n", err))
