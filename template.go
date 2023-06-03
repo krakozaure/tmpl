@@ -9,15 +9,6 @@ import (
 	"text/template"
 )
 
-func templateRun(input string) error {
-	outputString, err := executeTemplateFile(input)
-	if err != nil {
-		return err
-	}
-	fmt.Print(outputString)
-	return nil
-}
-
 func executeTemplateFile(input string) (string, error) {
 	var (
 		err          error

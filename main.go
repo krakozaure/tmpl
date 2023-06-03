@@ -24,8 +24,10 @@ func main() {
 		inputsDir = filepath.Dir(inputAbs)
 	}
 
-	err := templateRun(input)
+	output, err := executeTemplateFile(input)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v", err)
+		return
 	}
+	fmt.Print(output)
 }
