@@ -21,7 +21,7 @@ fileMTime:  {{ fileMTime $p }}
 
 -------------------------------------------------------
 
-{{ with $x := "./inputs/file with spaces.txt" -}}
+{{ with $x := fromInputDir "file with spaces.txt" -}}
 Content of "{{ $x }}"
 
 ```raw

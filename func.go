@@ -20,6 +20,7 @@ func getFuncMap() template.FuncMap {
 	f := sprig.GenericFuncMap()
 
 	f["include"] = includeTemplate
+	f["fromInputDir"] = fromInputDir
 
 	f["toBool"] = toBool
 	f["toToml"] = toToml
@@ -52,6 +53,10 @@ func includeTemplate(input string) string {
 		return ""
 	}
 	return outputString
+}
+
+func fromInputDir(input string) string {
+	return filepath.Join(getIncludeDir(input), input)
 }
 
 func getIncludeDir(input string) string {
