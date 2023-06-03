@@ -14,9 +14,6 @@ func main() {
 		flag.Usage()
 		os.Exit(0)
 	}
-	if flag.NArg() > 1 {
-		panic("Only one input should be given")
-	}
 
 	input := flag.Arg(0)
 	if input != "-" {
