@@ -10,7 +10,7 @@ import (
 type stringsArray []string
 
 func (s *stringsArray) String() string {
-	return fmt.Sprintf("%v", *s)
+	return fmt.Sprint(*s)
 }
 
 func (s *stringsArray) Set(value string) error {
