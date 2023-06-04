@@ -1,8 +1,8 @@
 ### Environment variables
 
-HOME:   {{ .Env.HOME }}
-USER:   {{ .Env.USER }}
-EDITOR: {{ .Env.EDITOR }}
+HOME:   {{ env "HOME" }}
+USER:   {{ env "USER" }}
+EDITOR: {{ env "EDITOR" }}
 
 ### Nested data
 
