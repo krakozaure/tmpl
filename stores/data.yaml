@@ -18,4 +18,3 @@ test_paths:
   - .
   - ./stores
   - ./main.go
-  - ./missing_file
