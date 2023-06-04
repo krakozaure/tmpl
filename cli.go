@@ -30,19 +30,19 @@ func initFlags() {
 	flag.Var(
 		&FilesList,
 		"f",
-		"load variables from JSON/TOML/YAML files (format: file path)",
+		"Load variables from one or more JSON/TOML/YAML files (format: file path)",
 	)
 	flag.Var(
 		&VarsList,
 		"v",
-		"use one or more variables from the command line (format: name=value)",
+		"Use one or more variables from the command line (format: name=value)",
 	)
 
 	flag.BoolVar(
 		&Strict,
 		"s",
 		false,
-		"exit on any error during template processing (default false)",
+		"Strict mode. Raise errors if variables are missing (default: false)",
 	)
 
 	flag.Usage = func() {
