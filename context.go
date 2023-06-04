@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 
@@ -43,7 +44,7 @@ func getFileVariables(file string) map[string]interface{} {
 
 	bytes, err := ioutil.ReadFile(file)
 	if err != nil {
-		fmt.Fprint(os.Stderr, fmt.Errorf("unable to read file\n%v\n", err))
+		log.Printf("unable to read file\n%v\n", err)
 		return vars
 	}
 
@@ -57,7 +58,7 @@ func getFileVariables(file string) map[string]interface{} {
 		err = fmt.Errorf("bad file type: %s", file)
 	}
 	if err != nil {
-		fmt.Fprint(os.Stderr, fmt.Errorf("unable to load data\n%v\n", err))
+		log.Printf("unable to load data\n%v\n", err)
 	}
 	return vars
 }

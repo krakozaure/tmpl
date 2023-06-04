@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -53,8 +54,7 @@ func initFlags() {
 	)
 
 	flag.Usage = func() {
-		fmt.Fprintf(
-			os.Stderr,
+		log.Printf(
 			`USAGE: %s [OPTIONS] INPUT
 
 INPUT is a template file or '-' for stdin

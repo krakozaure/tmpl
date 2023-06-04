@@ -3,14 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 )
 
 func main() {
+	log.SetFlags(0)
+	log.SetPrefix(fmt.Sprintf("%s: ", os.Args[0]))
 
 	initFlags()
 	if flag.NArg() == 0 {
+		log.SetPrefix("")
 		flag.Usage()
 		os.Exit(2)
 	}
@@ -26,8 +30,7 @@ func main() {
 
 	output, err := executeTemplateFile(input)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v", err)
-		return
+		log.Fatal(err)
 	}
 	fmt.Print(output)
 }
