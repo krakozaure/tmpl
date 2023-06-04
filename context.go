@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/BurntSushi/toml"
@@ -15,10 +14,6 @@ import (
 var ctx = make(map[string]interface{})
 
 func loadContext() {
-	if UseEnv {
-		ctx["Env"] = getEnvVariables()
-	}
-
 	for _, file := range FilesList {
 		for k, v := range getFileVariables(file) {
 			ctx[k] = v
@@ -28,15 +23,6 @@ func loadContext() {
 	for k, v := range getCliVariables() {
 		ctx[k] = v
 	}
-}
-
-func getEnvVariables() map[string]string {
-	vars := make(map[string]string)
-	for _, env := range os.Environ() {
-		kv := strings.SplitN(env, "=", 2)
-		vars[kv[0]] = kv[1]
-	}
-	return vars
 }
 
 func getFileVariables(file string) map[string]interface{} {

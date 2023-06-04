@@ -27,7 +27,6 @@ USAGE: tmpl [OPTIONS] INPUT
 INPUT is a template file or '-' for stdin
 
 OPTIONS:
-  -e    load variables from environment (default true)
   -f value
         load variables from JSON/TOML/YAML files (format: file path)
   -s    exit on any error during template processing (default false)
@@ -38,14 +37,14 @@ OPTIONS:
 - `stdin` and environment variables.
 
 ```bash
-$ echo "Editor = {{ .Env.EDITOR }}, Shell = {{ .Env.SHELL }}" | tmpl -
+$ echo 'Editor = {{ env "EDITOR" }}, Shell = {{ env "SHELL" }}' | tmpl -
 Editor = nvim, Shell = /bin/bash
 ```
 
 - `stdin` and CLI variables.
 
 ```bash
-$ echo "Hello, {{ .foo }} !" | tmpl -v foo=bar -
+$ tmpl -v foo=bar - <<< 'Hello, {{ .foo }} !'
 Hello, bar !
 ```
 

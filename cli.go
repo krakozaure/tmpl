@@ -23,18 +23,10 @@ func (s *stringsArray) Set(value string) error {
 var (
 	VarsList  stringsArray
 	FilesList stringsArray
-	UseEnv    bool
 	Strict    bool
 )
 
 func initFlags() {
-
-	flag.BoolVar(
-		&UseEnv,
-		"e",
-		true,
-		"load variables from environment",
-	)
 	flag.Var(
 		&FilesList,
 		"f",
