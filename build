@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -eu
+
+prog_name="$(basename "$PWD")"
+build_dir="./release"
+export GOARCH=amd64
+
+declare -A build_files
+build_files[darwin]="${prog_name}-darwin_${GOARCH}"
+build_files[linux]="${prog_name}-linux_${GOARCH}"
+build_files[windows]="${prog_name}-windows_${GOARCH}.exe"
+
+rm -fr -- "${build_dir}"
+mkdir -p -- "${build_dir}"
+
+printf '\e[34m-> Building\e[0m\n'
+for os in ${!build_files[@]}; do
+  f="${build_files[$os]}"
+  echo " - $f"
+  GOOS="${os}" go build -ldflags='-s -w' -o "${build_dir}/$f"
+done
+
+cd -- "${build_dir}"
+
+printf '\e[34m-> Generating checksums\e[0m\n'
+for os in ${!build_files[@]}; do
+  f="${build_files[$os]}"
+  echo " - $f"
+  sha256sum "$f" >> "$f.sha256"
+done
+
+printf '\e[34m-> Generating signatures\e[0m\n'
+for os in ${!build_files[@]}; do
+  f="${build_files[$os]}"
+  echo " - $f"
+  gpg --quiet --yes --default-key Krakozaure --output "$f.sha256.sig" --detach-sign "$f.sha256"
+done
