@@ -12,7 +12,7 @@ func main() {
 	initFlags()
 	if flag.NArg() == 0 {
 		flag.Usage()
-		os.Exit(0)
+		os.Exit(2)
 	}
 
 	input := flag.Arg(0)
