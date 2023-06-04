@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -18,7 +17,7 @@ func executeTemplateFile(input string) (string, error) {
 
 	inputBytes, err := readInput(input)
 	if err != nil {
-		return "", fmt.Errorf("unable to read input %v\n%v\n", input, err)
+		return "", err
 	}
 
 	tmpl := template.New(input)
@@ -26,7 +25,10 @@ func executeTemplateFile(input string) (string, error) {
 
 	tmpl, err = tmpl.Parse(string(inputBytes))
 	if err != nil {
-		return "", fmt.Errorf("unable to parse input\n%v\n", err)
+		return "", err
+	}
+	if Strict == true {
+		tmpl.Option("missingkey=error")
 	}
 
 	if len(ctx) == 0 {
@@ -35,7 +37,7 @@ func executeTemplateFile(input string) (string, error) {
 
 	err = tmpl.Execute(&outputBytes, ctx)
 	if err != nil {
-		return "", fmt.Errorf("unable to render template\n%v\n", err)
+		return "", err
 	}
 
 	outputString = outputBytes.String()

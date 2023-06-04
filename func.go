@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -38,162 +37,130 @@ func getFuncMap() template.FuncMap {
 	return f
 }
 
-func include(input string) string {
+func include(input string) (string, error) {
+	var err error
 	includeDir := inputsDir
 	if !filepath.IsAbs(input) {
-		includeDir = getIncludeDir(input)
+		includeDir, err = getIncludeDir(input)
+		if err != nil {
+			return "", err
+		}
 	}
 	input = filepath.Join(includeDir, input)
 
 	outputString, err := executeTemplateFile(input)
 	if err != nil {
-		if Strict {
-			panic(fmt.Errorf("unable to render included template\n%v\n", err))
-		}
-		return ""
+		return "", err
 	}
-	return outputString
+	return outputString, nil
 }
 
-func fromInputDir(input string) string {
-	return filepath.Join(getIncludeDir(input), input)
+func fromInputDir(input string) (string, error) {
+	dir, err := getIncludeDir(input)
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(dir, input), nil
 }
 
-func getIncludeDir(input string) string {
-	// If input is stdin,
-	// template paths are relative to the current working directory
-	// else relative to the input directory
+func getIncludeDir(input string) (string, error) {
 	if input == "-" {
 		cwd, err := filepath.Abs(".")
 		if err != nil {
-			cwd = "."
+			return "", err
 		}
-		return cwd
+		return cwd, nil
 	} else {
-		return inputsDir
+		return inputsDir, nil
 	}
 }
 
-func toBool(value string) bool {
-	// 0/1, f/t, F/T, FALSE/TRUE, False/True, false/true
+func toBool(value string) (bool, error) {
 	result, err := strconv.ParseBool(value)
 	if err != nil {
-		if Strict {
-			panic(err.Error())
-		}
-		return false
+		return false, err
 	}
-	return result
+	return result, nil
 }
 
-func toYaml(v interface{}) string {
+func toYaml(v interface{}) (string, error) {
 	data, err := yaml.Marshal(v)
 	if err != nil {
-		if Strict {
-			panic(err.Error())
-		}
-		return ""
+		return "", err
 	}
-	return string(data)
+	return string(data), nil
 }
 
-func toToml(v interface{}) string {
+func toToml(v interface{}) (string, error) {
 	buf := bytes.NewBuffer(nil)
 	enc := toml.NewEncoder(buf)
 	err := enc.Encode(v)
 	if err != nil {
-		if Strict {
-			panic(err.Error())
-		}
-		return ""
+		return "", err
 	}
-	return buf.String()
+	return buf.String(), nil
 }
 
-func absPath(file string) string {
+func absPath(file string) (string, error) {
 	new_file, err := filepath.Abs(file)
 	if err != nil {
-		if Strict {
-			panic(err.Error())
-		}
-		return ""
+		return "", err
 	}
-	return new_file
+	return new_file, nil
 }
 
-func isDir(path string) bool {
+func isDir(path string) (bool, error) {
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		if Strict {
-			panic(err.Error())
-		}
-		return false
+		return false, err
 	}
-	return info.IsDir()
+	return info.IsDir(), nil
 }
 
-func isFile(path string) bool {
+func isFile(path string) (bool, error) {
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		if Strict {
-			panic(err.Error())
-		}
-		return false
+		return false, err
 	}
-	return info.Mode().IsRegular()
+	return info.Mode().IsRegular(), nil
 }
 
-func fileExists(path string) bool {
+func fileExists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		if Strict {
-			panic(err.Error())
-		}
-		return false
+		return false, err
 	}
-	return true
+	return true, nil
 }
 
-func fileMode(path string) string {
+func fileMode(path string) (string, error) {
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		if Strict {
-			panic(err.Error())
-		}
-		return ""
+		return "", err
 	}
-	return info.Mode().String()
+	return info.Mode().String(), nil
 }
 
-func fileSize(file string) int64 {
+func fileSize(file string) (int64, error) {
 	info, err := os.Stat(file)
 	if err != nil {
-		if Strict {
-			panic(err.Error())
-		}
-		return 0
+		return 0, err
 	}
-	return info.Size()
+	return info.Size(), nil
 }
 
-func fileMTime(file string) string {
+func fileMTime(file string) (string, error) {
 	info, err := os.Stat(file)
 	if err != nil {
-		if Strict {
-			panic(err.Error())
-		}
-		return ""
+		return "", err
 	}
-	return info.ModTime().String()
+	return info.ModTime().String(), nil
 }
 
-func fileRead(file string) string {
+func fileRead(file string) (string, error) {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		if Strict {
-			panic(err.Error())
-		}
-		return ""
+		return "", err
 	}
-	return string(data)
+	return string(data), nil
 }
