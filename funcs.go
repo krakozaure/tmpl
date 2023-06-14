@@ -26,13 +26,13 @@ func getFuncMap() template.FuncMap {
 	f["toYaml"] = toYaml
 
 	f["absPath"] = absPath
-	f["isFile"] = isFile
-	f["isDir"] = isDir
 	f["fileExists"] = fileExists
-	f["fileMode"] = fileMode
-	f["fileSize"] = fileSize
 	f["fileMTime"] = fileMTime
+	f["fileMode"] = fileMode
 	f["fileRead"] = fileRead
+	f["fileSize"] = fileSize
+	f["isDir"] = isDir
+	f["isFile"] = isFile
 
 	return f
 }
