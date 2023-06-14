@@ -18,8 +18,8 @@ var inputsDir = "."
 func getFuncMap() template.FuncMap {
 	f := sprig.GenericFuncMap()
 
-	f["include"] = include
 	f["fromInputDir"] = fromInputDir
+	f["include"] = include
 
 	f["toBool"] = toBool
 	f["toToml"] = toToml
@@ -27,8 +27,8 @@ func getFuncMap() template.FuncMap {
 
 	f["absPath"] = absPath
 	f["fileExists"] = fileExists
-	f["fileMTime"] = fileMTime
 	f["fileMode"] = fileMode
+	f["fileMtime"] = fileMtime
 	f["fileRead"] = fileRead
 	f["fileSize"] = fileSize
 	f["isDir"] = isDir
@@ -36,6 +36,8 @@ func getFuncMap() template.FuncMap {
 
 	return f
 }
+
+// --- Includes ------------------------------------------------------------------------------------
 
 func include(input string) (string, error) {
 	var err error
@@ -75,20 +77,14 @@ func getIncludeDir(input string) (string, error) {
 	}
 }
 
+// --- Type conversion -----------------------------------------------------------------------------
+
 func toBool(value string) (bool, error) {
 	result, err := strconv.ParseBool(value)
 	if err != nil {
 		return false, err
 	}
 	return result, nil
-}
-
-func toYaml(v interface{}) (string, error) {
-	data, err := yaml.Marshal(v)
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func toToml(v interface{}) (string, error) {
@@ -101,28 +97,22 @@ func toToml(v interface{}) (string, error) {
 	return buf.String(), nil
 }
 
+func toYaml(v interface{}) (string, error) {
+	data, err := yaml.Marshal(v)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
+// --- Paths ---------------------------------------------------------------------------------------
+
 func absPath(file string) (string, error) {
 	new_file, err := filepath.Abs(file)
 	if err != nil {
 		return "", err
 	}
 	return new_file, nil
-}
-
-func isDir(path string) (bool, error) {
-	info, err := os.Stat(path)
-	if os.IsNotExist(err) {
-		return false, err
-	}
-	return info.IsDir(), nil
-}
-
-func isFile(path string) (bool, error) {
-	info, err := os.Stat(path)
-	if os.IsNotExist(err) {
-		return false, err
-	}
-	return info.Mode().IsRegular(), nil
 }
 
 func fileExists(path string) (bool, error) {
@@ -141,15 +131,7 @@ func fileMode(path string) (string, error) {
 	return info.Mode().String(), nil
 }
 
-func fileSize(file string) (int64, error) {
-	info, err := os.Stat(file)
-	if err != nil {
-		return 0, err
-	}
-	return info.Size(), nil
-}
-
-func fileMTime(file string) (string, error) {
+func fileMtime(file string) (string, error) {
 	info, err := os.Stat(file)
 	if err != nil {
 		return "", err
@@ -163,4 +145,28 @@ func fileRead(file string) (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+func fileSize(file string) (int64, error) {
+	info, err := os.Stat(file)
+	if err != nil {
+		return 0, err
+	}
+	return info.Size(), nil
+}
+
+func isDir(path string) (bool, error) {
+	info, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false, err
+	}
+	return info.IsDir(), nil
+}
+
+func isFile(path string) (bool, error) {
+	info, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false, err
+	}
+	return info.Mode().IsRegular(), nil
 }
