@@ -2,10 +2,12 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"text/template"
 
 	"github.com/BurntSushi/toml"
@@ -33,6 +35,10 @@ func getFuncMap() template.FuncMap {
 	f["fileSize"] = fileSize
 	f["isDir"] = isDir
 	f["isFile"] = isFile
+	f["joinPath"] = joinPath
+	f["toBackslash"] = toBackslash
+	f["toOsPath"] = toOsPath
+	f["toSlash"] = toSlash
 
 	return f
 }
@@ -169,4 +175,24 @@ func isFile(path string) (bool, error) {
 		return false, err
 	}
 	return info.Mode().IsRegular(), nil
+}
+
+func joinPath(segments []any) string {
+	string_segments := make([]string, 0, len(segments))
+	for _, v := range segments {
+		string_segments = append(string_segments, fmt.Sprint(v))
+	}
+	return filepath.Join(string_segments...)
+}
+
+func toBackslash(path string) string {
+	return strings.ReplaceAll(path, "/", "\\")
+}
+
+func toOsPath(path string) string {
+	return strings.ReplaceAll(path, "\\", string(filepath.Separator))
+}
+
+func toSlash(path string) string {
+	return strings.ReplaceAll(path, "\\", "/")
 }
