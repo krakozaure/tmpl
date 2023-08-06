@@ -24,6 +24,8 @@ var (
 	VarsList  stringsArray
 	FilesList stringsArray
 	Strict    bool
+	DataVar   string
+	OutPath   string
 )
 
 func initFlags() {
@@ -45,6 +47,20 @@ func initFlags() {
 		"Strict mode. Raise errors if variables are missing (default: false)",
 	)
 
+	flag.StringVar(
+		&DataVar,
+		"data",
+		"",
+		"JSON data as a string or reference to a file ('@file') [DO NOT USE]",
+	)
+
+	flag.StringVar(
+		&OutPath,
+		"o",
+		"",
+		"Output file path, uses stdout if not set (format: file path)",
+	)
+
 	flag.Usage = func() {
 		log.Printf(
 			`USAGE: %s [OPTIONS] INPUT
@@ -56,6 +72,16 @@ OPTIONS:
 			os.Args[0],
 		)
 		flag.PrintDefaults()
+		log.Printf(`
+The '-data' flag is for compatibility with https://github.com/benbjohnson/tmpl
+and its use is not recommended.
+
+When 'data' is used the '-f' and '-v' args are ignored, the INPUT file is
+expected to have the '.tmpl' suffix and if the '-o' flag is not used the output
+is written to the INPUT path removing the '.tmpl' suffix (if INPUT is '-' the
+output goes to stdout).
+`,
+		)
 	}
 
 	flag.Parse()

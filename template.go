@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 	"text/template"
@@ -31,11 +31,16 @@ func executeTemplateFile(input string) (string, error) {
 		tmpl.Option("missingkey=error")
 	}
 
-	if len(ctx) == 0 {
+	if len(ctx) == 0 && cdata == nil {
 		loadContext()
 	}
 
-	err = tmpl.Execute(&outputBytes, ctx)
+	if cdata == nil {
+		err = tmpl.Execute(&outputBytes, ctx)
+	} else {
+		err = tmpl.Execute(&outputBytes, cdata)
+	}
+
 	if err != nil {
 		return "", err
 	}
@@ -51,9 +56,9 @@ func readInput(input string) ([]byte, error) {
 		inputBytes []byte
 	)
 	if input == "-" {
-		inputBytes, err = ioutil.ReadAll(os.Stdin)
+		inputBytes, err = io.ReadAll(os.Stdin)
 	} else {
-		inputBytes, err = ioutil.ReadFile(input)
+		inputBytes, err = os.ReadFile(input)
 	}
 	return inputBytes, err
 }
