@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/BurntSushi/toml"
@@ -12,8 +12,14 @@ import (
 )
 
 var ctx = make(map[string]interface{})
+var cdata interface{}
 
 func loadContext() {
+	getDataVar()
+	if cdata != nil {
+		return
+	}
+
 	for _, file := range FilesList {
 		for k, v := range getFileVariables(file) {
 			ctx[k] = v
@@ -25,10 +31,28 @@ func loadContext() {
 	}
 }
 
+func getDataVar() {
+	if DataVar != "" {
+		buf := []byte(DataVar)
+		// If the data has a @-prefix then read from a file.
+		if strings.HasPrefix(DataVar, "@") {
+			bytes, err := os.ReadFile(strings.TrimPrefix(DataVar, "@"))
+			if err != nil {
+				log.Printf("unable to read file\n%v\n", err)
+			}
+			buf = bytes
+		}
+		err := json.Unmarshal(buf, &cdata)
+		if err != nil {
+			log.Printf("unable to load data\n%v\n", err)
+		}
+	}
+}
+
 func getFileVariables(file string) map[string]interface{} {
 	vars := make(map[string]interface{})
 
-	bytes, err := ioutil.ReadFile(file)
+	bytes, err := os.ReadFile(file)
 	if err != nil {
 		log.Printf("unable to read file\n%v\n", err)
 		return vars
