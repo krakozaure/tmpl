@@ -30,8 +30,7 @@ func getFileVariables(file string) map[string]interface{} {
 
 	bytes, err := ioutil.ReadFile(file)
 	if err != nil {
-		log.Printf("unable to read file\n%v\n", err)
-		return vars
+		log.Fatalf("unable to read file\n%v\n", err)
 	}
 
 	if strings.HasSuffix(file, ".json") {
@@ -44,7 +43,7 @@ func getFileVariables(file string) map[string]interface{} {
 		err = fmt.Errorf("bad file type: %s", file)
 	}
 	if err != nil {
-		log.Printf("unable to load data\n%v\n", err)
+		log.Fatalf("unable to load data\n%v\n", err)
 	}
 	return vars
 }
