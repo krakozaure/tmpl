@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 	"text/template"
@@ -51,9 +51,9 @@ func readInput(input string) ([]byte, error) {
 		inputBytes []byte
 	)
 	if input == "-" {
-		inputBytes, err = ioutil.ReadAll(os.Stdin)
+		inputBytes, err = io.ReadAll(os.Stdin)
 	} else {
-		inputBytes, err = ioutil.ReadFile(input)
+		inputBytes, err = os.ReadFile(input)
 	}
 	return inputBytes, err
 }
