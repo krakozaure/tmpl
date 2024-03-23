@@ -40,3 +40,9 @@ uuidv4: {{ uuidv4 }}
 ### Included templates
 
 {{ include "_paths.txt.tmpl" -}}
+
+### List from Key
+
+{{ range .Key -}}
+{{ . }}
+{{ end -}}

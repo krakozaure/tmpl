@@ -23,6 +23,7 @@ func (s *stringsArray) Set(value string) error {
 var (
 	VarsList  stringsArray
 	FilesList stringsArray
+	KeysList  stringsArray
 	Strict    bool
 )
 
@@ -31,6 +32,11 @@ func initFlags() {
 		&FilesList,
 		"f",
 		"Load variables from one or more JSON/TOML/YAML files (format: file path)",
+	)
+	flag.Var(
+		&KeysList,
+		"k",
+		"Load data from JSON/TOML/YAML files into keys (format: key=file path)",
 	)
 	flag.Var(
 		&VarsList,

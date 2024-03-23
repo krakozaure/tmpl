@@ -28,10 +28,12 @@ INPUT is a template file or '-' for stdin
 
 OPTIONS:
   -f value
-        load variables from JSON/TOML/YAML files (format: file path)
-  -s    exit on any error during template processing (default false)
+        Load variables from one or more JSON/TOML/YAML files (format: file path)
+  -k value
+        Load data from JSON/TOML/YAML files into keys (format: key=file path)
+  -s    Strict mode. Raise errors if variables are missing (default: false)
   -v value
-        use one or more variables from the command line (format: name=value)
+        Use one or more variables from the command line (format: name=value)
 ```
 
 - `stdin` and environment variables.
@@ -53,7 +55,7 @@ Hello, bar !
 Output is not pasted here because of its length.
 
 ```bash
-$ tmpl -f ./stores/data.yaml ./inputs/sample.txt.tmpl
+$ tmpl -f ./stores/data.yaml -k Key=./stores/list.yaml ./inputs/sample.txt.tmpl
 ```
 
 ## Configuration

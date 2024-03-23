@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -78,9 +77,8 @@ func getIncludeDir(input string) (string, error) {
 			return "", err
 		}
 		return cwd, nil
-	} else {
-		return inputsDir, nil
 	}
+	return inputsDir, nil
 }
 
 // --- Type conversion -----------------------------------------------------------------------------
@@ -114,11 +112,11 @@ func toYaml(v interface{}) (string, error) {
 // --- Paths ---------------------------------------------------------------------------------------
 
 func absPath(file string) (string, error) {
-	new_file, err := filepath.Abs(file)
+	newFile, err := filepath.Abs(file)
 	if err != nil {
 		return "", err
 	}
-	return new_file, nil
+	return newFile, nil
 }
 
 func fileExists(path string) (bool, error) {
@@ -146,7 +144,7 @@ func fileMtime(file string) (string, error) {
 }
 
 func fileRead(file string) (string, error) {
-	data, err := ioutil.ReadFile(file)
+	data, err := os.ReadFile(file)
 	if err != nil {
 		return "", err
 	}
@@ -178,11 +176,11 @@ func isFile(path string) (bool, error) {
 }
 
 func joinPath(segments []any) string {
-	string_segments := make([]string, 0, len(segments))
+	stringSegments := make([]string, 0, len(segments))
 	for _, v := range segments {
-		string_segments = append(string_segments, fmt.Sprint(v))
+		stringSegments = append(stringSegments, fmt.Sprint(v))
 	}
-	return filepath.Join(string_segments...)
+	return filepath.Join(stringSegments...)
 }
 
 func toBackslash(path string) string {
